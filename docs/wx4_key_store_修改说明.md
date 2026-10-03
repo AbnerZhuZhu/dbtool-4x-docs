@@ -14,7 +14,7 @@
 
 | # | 你要的 | 实现方式 | 实测结果 |
 | --- | --- | --- | --- |
-| 1 | 内存密钥与 `all_keys.json` 不同时自动回写 | 新增 `update_keys_file()`：**每条都自己再跑一遍真库第 1 页 HMAC**，通过才写；写前备份、原子替换；旧值记进 `prev_enc_key` | ✅ 实测把 `message\message_resource.db` 从 `f7e19d0b…` 更新为内存里的 `8e8cb6f9…`；备份 `all_keys.json.bak_20261004_022139`；其余 28 条一字未动 |
+| 1 | 内存密钥与 `all_keys.json` 不同时自动回写 | 新增 `update_keys_file()`：**每条都自己再跑一遍真库第 1 页 HMAC**，通过才写；写前备份、原子替换；旧值记进 `prev_enc_key` | ✅ 实测把 `message\message_resource.db` 从 `<密钥已脱敏>…` 更新为内存里的 `<密钥已脱敏>…`；备份 `all_keys.json.bak_20261004_022139`；其余 28 条一字未动 |
 | 2 | 10 个未匹配串另存 | 新增 `save_unmatched_keys()`：写到 `C:\Users\Administrator\.wechat-cli\extra_mem_keys.json`，注明来源用途，与已有内容合并去重 | ✅ 文件已生成，`_count=10`，每条含 enc_key / salt / 出现次数 / first_seen / last_seen / `page1_hmac_verified=false` |
 | 3 | `--scan_mem` 作为 4.x 默认选项 | `info` / `bias` 在 `--mode 4x` 且未给 `--key_file` 时**自动开启**；加 `--no_scan_mem` 可关 | ✅ `wxdump info --mode 4x`、`wxdump bias --mode 4x` 不带任何参数即走内存取密钥，拿到 20 把 |
 
@@ -326,7 +326,7 @@ $PY = "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
 
 | 路径 | 变化 |
 | --- | --- |
-| `C:\Users\Administrator\.wechat-cli\all_keys.json` | `message\message_resource.db` 的 `enc_key`：`f7e19d0b…` → `8e8cb6f9…`；该条新增 `prev_enc_key`、`source: memory_scan`；其余 28 条未动 |
+| `C:\Users\Administrator\.wechat-cli\all_keys.json` | `message\message_resource.db` 的 `enc_key`：`<密钥已脱敏>…` → `<密钥已脱敏>…`；该条新增 `prev_enc_key`、`source: memory_scan`；其余 28 条未动 |
 | `C:\Users\Administrator\.wechat-cli\all_keys.json.bak_20261004_022139` | 改动前的完整备份（与改动前逐字节一致，SHA256 `f293a012f8fc…`） |
 | `C:\Users\Administrator\.wechat-cli\extra_mem_keys.json` | 新建，10 条未匹配串，含 `_note` / `_source` / `_generated_at` / `_mask` / `_count` |
 
@@ -342,7 +342,7 @@ $PY = "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
   "unmatched_keys": [
     {
       "enc_key": "<密钥已脱敏>…",
-      "salt": "f81a613c…",
+      "salt": "<密钥已脱敏>…",
       "occurrences": 1,
       "page1_hmac_verified": false,
       "reason": "内存扫描命中，但当前可校验库里没有匹配该 salt 的库（可能是其它账号 / 已轮换）",

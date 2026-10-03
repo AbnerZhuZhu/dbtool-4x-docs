@@ -787,7 +787,7 @@ $env:PYTHONPATH = "D:\PyWxDump_Source"
     pid=3736 Weixin.exe  基址=0x7ff72b090000  私有内存=7 MB  可扫区段=137 个
 [*] 说明：4.x 不用 WX_OFFS.json 的固定偏移，所以没有 3.x 那种 [昵称,账号,手机号,邮箱,KEY] 偏移量可报
 {库路径: 密钥}
-{'message\\message_0.db': '47134177…', 'contact\\contact.db': 'e6f3083d…', …}   ← 29 条
+{'message\\message_0.db': '<密钥已脱敏>…', 'contact\\contact.db': '<密钥已脱敏>…', …}   ← 29 条
 ```
 
 **①的实际输出：**
