@@ -22,7 +22,7 @@
 
 ```
 [+] 已回写密钥文件：C:\Users\Administrator\.wechat-cli\all_keys.json（备份 all_keys.json.bak_20261004_022139）
-    更新 message\message_resource.db：f7e19d0bac274ef1… -> 8e8cb6f9ce704c49…
+    更新 message\message_resource.db：<密钥已脱敏>… -> <密钥已脱敏>…
 [+] 未匹配串已另存：C:\Users\Administrator\.wechat-cli\extra_mem_keys.json（文件累计 10 条，本次新增 10 条）
 ```
 
@@ -341,7 +341,7 @@ $PY = "C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
   "_count": 10,
   "unmatched_keys": [
     {
-      "enc_key": "0eee3ec0b9b1c768…",
+      "enc_key": "<密钥已脱敏>…",
       "salt": "f81a613c…",
       "occurrences": 1,
       "page1_hmac_verified": false,

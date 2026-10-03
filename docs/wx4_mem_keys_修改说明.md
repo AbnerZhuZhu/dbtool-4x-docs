@@ -293,7 +293,7 @@ pywxdump\wx_core\get_bias_addr.py    ← 去掉 run_wx4_xor_keys / print_xor_key
 
 ## 6. 遗留 / 未决
 
-1. **10 个串在本机 273 个库里找不到对应 salt**（形如 `e96a8df3a53a2d45…/ab6eed90…`）。可能是其它账号的库、或已轮换的旧密钥。要不要一并写盘保存，请拍板（**未擅自写**）。
+1. **10 个串在本机 273 个库里找不到对应 salt**（形如 `<密钥已脱敏>…/ab6eed90…`）。可能是其它账号的库、或已轮换的旧密钥。要不要一并写盘保存，请拍板（**未擅自写**）。
 2. **`message_resource.db` 在 `all_keys.json` 里已过期**，内存里拿到的才是最新的
    （`<密钥已脱敏>`，真库第 1 页 HMAC 通过）。
    要不要回写 `C:\Users\Administrator\.wechat-cli\all_keys.json`？**等你确认后再动**。
