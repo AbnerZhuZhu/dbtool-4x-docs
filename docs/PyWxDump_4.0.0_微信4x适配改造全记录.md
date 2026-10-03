@@ -19,7 +19,7 @@
 | 工作 / 配置目录 | `C:\Users\Administrator\wxdump_work\`（`conf_auto.json`、`decrypted_wx4\<账号>\`） |
 | 桌面（脚本与文档输出） | `E:\Users\Administrator\Desktop\` |
 | 备份目录 | `E:\PyWxDump_4x_Backup\`（本次同步后：**125 文件 / 565,468,042 B**；其中不含 `_keep`、`wxdump_work` 的源码镜像为 86 文件 / 17,479,775 B） |
-| 测试账号 | 柳岸 `<本人wxid>`（数据目录后缀 `_fed4`）、聚客猫 `<新号wxid>_aa50` |
+| 测试账号 | 柳岸 `<本人wxid>`（数据目录后缀 `<目录后缀>`）、聚客猫 `<账号目录名>` |
 | 密钥文件 | `C:\Users\Administrator\.wechat-cli\all_keys.json`（当前 45 条）、`extra_mem_keys.json`（内存扫描发现、未匹配到当前可校验库，累计 15 条） |
 | 第三方依赖 | `pycryptodome`、`zstandard`、`pymem`、`psutil`、`sqlite3`（标准库） |
 
@@ -128,7 +128,7 @@
 | 17 | `wxdump dbshow --db_path "D:\merged.db"` 报 `unrecognized arguments` | 参数名不匹配 | 兼容 `--db_path`（原参数为 `-p/--db_path`，以 `dbshow -h` 为准） | 已修复 |
 | 18 | `pip install -e .` 报「不是 Python 项目」 | 清理时误删打包配置 | 补最小可用 `pyproject.toml`（项目名 `pywxdump`、版本 `4.0.0`、入口 `wxdump = pywxdump.cli:console_run`） | 已修复（文件 mtime 03:17） |
 | 19 | `wxdump info` 报 `AttributeError: 'NoneType' object has no attribute 'text_factory'`，`nickname/account` 为 None | ① 旧解密目录已被清理；② `_wx4_guess_decrypted_dir()` 只认 5 个老路径 → 返回 `None`（真正的库在 `wxdump_work\decrypted_wx4\<账号>\`）；③ `contact_db` 为 None 时仍执行 `con.text_factory`；④ 「目录在但缺 contact」时旧代码 `return []` 会连密钥都打不出来 | ① 猜目录新增 `wxdump_work\decrypted_wx4\<当前账号>` + `wx4_autodecrypt`；② contact 缺失时判空降级；③ 删除提前 `return []`；④ 有密钥无库时按需解密最小集 | 已修复（本轮复测仍为 `柳岸` / `AbnerUP`） |
-| 20 | **（本轮发现并修复）** 多处以 `D:\decrypted_wx_db`、`D:\xwechat_files\<本人wxid>_fed4` 等**写死路径**做默认值/自测路径 | 历史脚本遗留的固定路径，换盘或清理后会失效 | 7 个文件 10 处改为动态定位（含 `PYWXDUMP_WX4_ROOT` 覆盖），自测路径改为按目录扫描 | 已修复（见文末「本次处理记录」） |
+| 20 | **（本轮发现并修复）** 多处以 `D:\decrypted_wx_db`、`D:\xwechat_files\<账号目录名>` 等**写死路径**做默认值/自测路径 | 历史脚本遗留的固定路径，换盘或清理后会失效 | 7 个文件 10 处改为动态定位（含 `PYWXDUMP_WX4_ROOT` 覆盖），自测路径改为按目录扫描 | 已修复（见文末「本次处理记录」） |
 
 ---
 
@@ -211,7 +211,7 @@
 | 版本号 | **4.0.0**（`wxdump info` 首行输出 `[*] PyWxDump v4.0.0`） |
 | 备份 | `E:\PyWxDump_4x_Backup\`（**本次已同步**：125 文件 / 565,468,042 B；源码镜像 86 文件与源目录 **SHA256 逐个一致**；`_keep\merge_all.db` 440,090,624 B 作 3.x 回归基线，未改动） |
 | 配置 | `C:\Users\Administrator\wxdump_work\conf_auto.json`（`auto_setting.last = <本人wxid>`） |
-| 解密库 | `C:\Users\Administrator\wxdump_work\decrypted_wx4\<本人wxid>_fed4\`（28 个库）、`...\<新号wxid>_aa50\`（17 个库） |
+| 解密库 | `C:\Users\Administrator\wxdump_work\decrypted_wx4\<账号目录名>\`（28 个库）、`...\<账号目录名>\`（17 个库） |
 | 密钥 | `C:\Users\Administrator\.wechat-cli\all_keys.json`（45 条）、`extra_mem_keys.json`（15 条未匹配串，保留） |
 | 已清理 | `C:\Users\Administrator\wxdump_work\_obsolete_gap\message_gap2018_2023_decrypted.db`（331 张 `Msg_` 表 / 73,847 行 / 2018-09-12 20:10:13 ~ 2024-04-10 09:06:00）—— 经逐行比对确认仅为**旧格式冗余副本**，**已按指示删除**（原文件 28,119,040 B / 修改时间 2026-10-04 05:31:21 / SHA256 `DA7716AD7B429E772A81059B6425B9E4199311B09D36A976AA4102A52D5D7FC8`；详见文末「七、补片库最终归属判定与清理」） |
 | 主要改动文件 | `wx_core\wx_info.py`、`wx_core\get_bias_addr.py`、`wx_core\wx4_prepare.py`、`wx_core\wx4_xor_scan.py`、`wx_core\wx4_key_store.py`、`db\dbbase.py`、`db\dbMSG.py`、`db\dbContact.py`、`api\local_server.py`、`api\remote_server.py`、`ui\web\assets\StatisticsView-_MI6G2N3.js`、`cli.py`、`pyproject.toml` |
@@ -254,7 +254,7 @@ wxdump dbshow -p <db>  # 展示合并库（--db_path 已兼容）
 | 8 | 柳岸最早数据 = 2018-09-12 | 数据侧事实（非显示截断）；注入 2010–2026 已验证跨度无上限 | **保持原样**（本次未涉及；**已排除补片库嫌疑** —— 补片库经逐行比对确认为旧格式冗余副本并已删除，真库 2018 年数据本就完整） |
 | 9 | 周 / 月粒度聚合（用户称「第 8 条」） | 未启用（日历格子为「天」）；后端 `date_count` 已预留 `time_format` 参数 | **已忽略**（按指示保持原样，未修改） |
 | 10 | 其它账号 / 辅助库密钥（`extra_mem_keys.json`） | 15 条「内存扫描命中、但在 273 个本机可校验库里找不到对应 salt」的串；本机真库 0/15 命中（另有 6 个串来自最新一次扫描） | **保留，不清理**（判定：无需清理）。理由：① 它不是缓存或重复数据，而是被明确标注「未匹配、勿直接用于解密」的**排查线索**；② 文件仅 6,957 B；③ 已实测不会污染密钥匹配流程（HMAC 校验门会拦住）；④ 若日后出现新库或密钥轮换，这 15 条是唯一可回溯的比对材料；删除无实际收益。当前 13 把已校验密钥已覆盖本账号在用库 |
-| 11 | 历史路径已失效 | 早期脚本/代码引用 `D:\decrypted_wx_db`、`D:\xwechat_files\<本人wxid>_fed4` 等写死路径 | **✅ 已解决**：7 个文件 10 处改为**动态定位 + 回退**（详见文末「本次处理记录」）；`info`/`bias` 复测通过。**例外（有意保留）**：`ui\web\assets\DbInitComponent*.js`、`ChatView-*.js` 里 `C:\***\WeChat Files\wxid_*******` 属于**输入框占位符文字**，不参与路径解析、不会导致报错，且你要求不动已验证的 UI 代码，故未改；如需一并改成 `xwechat_files` 文案可单独提出 |
+| 11 | 历史路径已失效 | 早期脚本/代码引用 `D:\decrypted_wx_db`、`D:\xwechat_files\<账号目录名>` 等写死路径 | **✅ 已解决**：7 个文件 10 处改为**动态定位 + 回退**（详见文末「本次处理记录」）；`info`/`bias` 复测通过。**例外（有意保留）**：`ui\web\assets\DbInitComponent*.js`、`ChatView-*.js` 里 `C:\***\WeChat Files\wxid_*******` 属于**输入框占位符文字**，不参与路径解析、不会导致报错，且你要求不动已验证的 UI 代码，故未改；如需一并改成 `xwechat_files` 文案可单独提出 |
 | 12 | 早期阶段日期 | 前 9 个阶段的精确日期此前未记录 | **✅ 已解决（已统一）**：全部阶段已按文件 mtime 统一到 **2026-10-03 19:59 ~ 2026-10-04**，逐阶段日期见第 4 章表格；唯一不可取证项为 `batch_decrypt.py` 自身时间戳（该文件已在 P9 清理阶段删除）→ 标注**未确认** |
 
 ---
@@ -290,7 +290,7 @@ wxdump dbshow -p <db>  # 展示合并库（--db_path 已兼容）
 | `wx_core\wx4_prepare.py` | `choose_out_dir`（第 393 行） | 原来只认死路径 `D:\decrypted_wx_db` → 改为遍历候选列表，仍只在账号标记一致时复用 |
 | `wx_core\wx4_xor_scan.py` | 新增 `_default_wx_root()`（第 598 行起） | 动态根目录解析，支持环境变量 `PYWXDUMP_WX4_ROOT` 覆盖 |
 | `wx_core\wx4_xor_scan.py` | `collect_salts_from_db_files`（第 623 行）、`build_page1_map`（第 684 行） | 默认参数 `root=r"D:\xwechat_files"` → `root=None` + 内部动态解析 |
-| `wx_core\wx4_xor_scan.py` | `selftest()`（第 870 行）、`__main__`（第 919 行） | 自测里写死的 `D:\xwechat_files\<本人wxid>_fed4\db_storage` → 改为扫描动态根目录；CLI `--wx_root` 默认改 `None` 并动态解析 |
+| `wx_core\wx4_xor_scan.py` | `selftest()`（第 870 行）、`__main__`（第 919 行） | 自测里写死的 `D:\xwechat_files\<账号目录名>\db_storage` → 改为扫描动态根目录；CLI `--wx_root` 默认改 `None` 并动态解析 |
 | `wx_core\wx4_key_store.py` | 新增 `_wx_root_default()` + 常量（第 31/57 行） | `DEFAULT_WX_ROOT` 由写死字符串改为**动态解析结果**（保持“常量”用法不变，回退仍是 `D:\xwechat_files`） |
 | `wx_core\get_bias_addr.py` | `run_wx4`（第 790 行） | `root = wx_root or r"D:\xwechat_files"` → 复用已有 `self._wx4_default_roots()[0]` |
 | `wx_core\get_bias_addr.py` | `selftest_xor_decrypt`（第 885 行起） | 自测里写死的账号目录 → 改为在动态根目录下扫 `message_0.db` |
@@ -304,7 +304,7 @@ wxdump dbshow -p <db>  # 展示合并库（--db_path 已兼容）
 | 语法 | `py_compile` 7 个改动文件 | ALL OK |
 | 导入 | 导入 `pywxdump` 及 6 个改动模块 | import ok |
 | 动态定位生效 | 打印 4 个解析入口 | `wx_info` / `wx4_xor_scan` / `wx4_key_store` / `wx4_prepare` **均解析为 `D:\xwechat_files`**（与本机改动前行为一致，无回归） |
-| 解密库候选 | 打印 `_legacy_decrypt_candidates` | 返回 4 个候选，首个为当前实际使用的 `C:\Users\Administrator\wxdump_work\decrypted_wx4\<本人wxid>_fed4` |
+| 解密库候选 | 打印 `_legacy_decrypt_candidates` | 返回 4 个候选，首个为当前实际使用的 `C:\Users\Administrator\wxdump_work\decrypted_wx4\<账号目录名>` |
 | **功能回归** | `python -m pywxdump info --mem_budget 25`（cwd=`C:\Users\Administrator`） | **13 把密钥**、掩码正确、`nickname: 柳岸`、`account: AbnerUP`、`key_source: memory`、密钥文件无需更新、**无 Traceback** |
 | 备份一致性 | 逐文件 SHA256 比对 | 86 一致 / 0 不一致 / 0 缺失 |
 | 未动核心逻辑 | 仅改路径解析与文案，`info`/`bias`/`ui`/`api` 的判定逻辑未改 | 由上述回归背书 |
