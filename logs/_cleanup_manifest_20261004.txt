@@ -1,0 +1,52 @@
+清理清册 —— 生成于 2026-10-04 02:57:58
+==============================================================================
+
+[待删] D:\decrypted_wx_db   （4.x/3.x 解密库产物（含 merge_all.db））
+        32 个文件，2192.68 MB
+           136,568,832 B  2026-10-03 21:59:50  biz_message_0_decrypted.db
+                28,672 B  2026-10-03 21:59:49  bizchat_decrypted.db
+                86,016 B  2026-10-03 21:59:49  chatbot_message_decrypted.db
+            10,457,088 B  2026-10-03 21:59:49  contact_decrypted.db
+             3,772,416 B  2026-10-03 21:59:49  contact_fts_decrypted.db
+             1,753,088 B  2026-10-03 21:59:49  emoticon_decrypted.db
+             1,699,840 B  2026-10-03 21:59:49  favorite_decrypted.db
+               299,008 B  2026-10-03 21:59:49  favorite_fts_decrypted.db
+             6,991,872 B  2026-10-03 21:59:49  general_decrypted.db
+             1,982,464 B  2026-10-03 21:59:49  hardlink_decrypted.db
+             5,509,120 B  2026-10-03 21:59:49  head_image_decrypted.db
+                32,768 B  2026-10-04 01:23:50  head_image_decrypted.db-shm
+                     0 B  2026-10-04 01:23:50  head_image_decrypted.db-wal
+           897,294,336 B  2026-10-03 22:00:04  media_0_decrypted.db
+           140,611,584 B  2026-10-03 22:00:05  media_1_decrypted.db
+           440,090,624 B  2026-10-03 23:08:42  merge_all.db
+            62,914,560 B  2026-10-03 22:00:06  message_0_decrypted.db
+           100,200,448 B  2026-10-03 22:00:06  message_1_decrypted.db
+            70,463,488 B  2026-10-03 22:00:07  message_2_decrypted.db
+            40,681,472 B  2026-10-03 22:00:07  message_3_decrypted.db
+            58,380,288 B  2026-10-03 22:00:08  message_4_decrypted.db
+            47,140,864 B  2026-10-03 22:00:08  message_5_decrypted.db
+               602,112 B  2026-10-03 22:00:08  message_6_decrypted.db
+             1,830,912 B  2026-10-03 22:00:08  message_7_decrypted.db
+               860,160 B  2026-10-03 22:00:08  message_8_decrypted.db
+           251,658,240 B  2026-10-03 22:00:10  message_fts_decrypted.db
+            14,888,960 B  2026-10-03 22:00:10  message_resource_decrypted.db
+               487,424 B  2026-10-03 22:00:10  session_decrypted.db
+             1,716,224 B  2026-10-03 22:00:10  sns_decrypted.db
+               163,840 B  2026-10-03 22:00:10  solitaire_decrypted.db
+                12,288 B  2026-10-03 22:00:10  third_app_icon_decrypted.db
+                 8,192 B  2026-10-03 22:00:10  weclaw_decrypted.db
+
+[待删] C:\Users\Administrator\.wechat-cli   （密钥文件目录（all_keys.json 等））
+        7 个文件，0.04 MB
+                12,507 B  2026-10-04 02:39:30  all_keys.json
+                 5,518 B  2026-10-03 21:05:29  all_keys.json.bak_20261004_022139
+                 5,639 B  2026-10-04 02:21:39  all_keys.json.bak_20261004_022506
+                 7,562 B  2026-10-04 02:25:06  all_keys.json.bak_20261004_023858
+                 7,562 B  2026-10-04 02:38:58  all_keys.json.bak_20261004_023930
+                    74 B  2026-10-03 21:05:29  config.json
+                 6,093 B  2026-10-04 02:57:23  extra_mem_keys.json
+
+==============================================================================
+保留快照（删除后仍可在这些位置找到）：
+  [已快照] C:\Users\Administrator\.wechat-cli  ->  E:\PyWxDump_4x_Backup\_keep\wechat-cli（7 个文件，43.9 KB）
+  [已快照] D:\decrypted_wx_db\merge_all.db  ->  E:\PyWxDump_4x_Backup\_keep\merge_all.db（419.70 MB，SHA256 一致 ✅ 800938d0e5a8f367…）
