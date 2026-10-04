@@ -15,7 +15,100 @@
 - **不得用于商业用途**
 - **不得用于任何违法用途**
 
-> 原项目著作权与许可证归原作者所有：主包内附 `LICENSE`（位于 `pywxdump-3.1.46-py3-none-any.whl` 的 `pywxdump-3.1.46.dist-info/LICENSE`），请一并保留。
+> 原项目著作权与许可证归原作者所有：主包内附 `LICENSE`（位于 `pywxdump-3.1.46-py3-none-any.whl` 的 `pywxdump-3.1.46.dist-info/LICENSE`，License 声明为 **MIT**），请一并保留。
+
+## 环境要求
+
+| 项 | 要求 |
+| --- | --- |
+| 操作系统 | Windows 10 / 11（本存档为 win_amd64 依赖包） |
+| Python | 3.8 – 3.12（原包声明 `Requires-Python: >=3.8, <4`；本次验证环境 Python 3.12.8） |
+| pip | 任意较新版本（本次验证环境 pip 24.3.1） |
+| 权限 | 普通 PowerShell 即可；本目录的离线安装**不需要管理员权限**、**不需要联网** |
+
+## ⚠️ 安装前必读：命令名冲突
+
+3.1.46 与 4.0 改造版注册的是**同一个命令名**：
+
+```
+wxdump = pywxdump.cli:console_run
+```
+
+也就是说，**如果把 3.1.46 装进现有环境，会直接覆盖掉 4.0 改造版的 `wxdump` 命令**（`wxdump info` 会退回 3.x 逻辑）。
+所以本存档**推荐用独立虚拟环境安装**（方案 A），与现有环境完全隔离、互不影响。
+
+## 安装（PowerShell）
+
+### 方案 A：独立虚拟环境 + 本地离线安装（**推荐**）
+
+```powershell
+cd E:\Users\Administrator\Desktop\pywxdump_old
+python -m venv .venv-3146
+.\.venv-3146\Scripts\python.exe -m pip install --no-index --find-links . pywxdump==3.1.46
+.\.venv-3146\Scripts\wxdump.exe -V
+```
+
+- `--no-index` = 完全不联网；`--find-links .` = 全部依赖从**本目录已下载的 wheel** 安装。
+- 该命令已在本机实测可成功解析（`Would install pywxdump-3.1.46`），全流程无需联网。
+- 装完后所有调用都走虚拟环境里的可执行文件，例如
+  `.\.venv-3146\Scripts\wxdump.exe -h`。
+
+### 方案 B：全局离线安装（**会覆盖现有 `wxdump` 命令，慎用**）
+
+```powershell
+cd E:\Users\Administrator\Desktop\pywxdump_old
+python -m pip install --no-index --find-links . pywxdump==3.1.46
+```
+
+### 方案 C：联网一条命令直接下载并安装
+
+```powershell
+python -m pip install pywxdump==3.1.46
+```
+
+### 方案 C-2：先下载到本地、再离线安装（两步，等价于制作本存档的过程）
+
+```powershell
+python -m pip download pywxdump==3.1.46 -d E:\Users\Administrator\Desktop\pywxdump_old
+python -m pip install --no-index --find-links E:\Users\Administrator\Desktop\pywxdump_old pywxdump==3.1.46
+```
+
+> 若 `python` 不在 PATH，改用完整路径 `C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe`，或使用 `py -3.12`。
+
+## 验证安装
+
+```powershell
+wxdump -V      # 应输出：PyWxDump v3.1.46
+wxdump -h      # 查看全部子命令
+```
+
+3.1.46 共 10 个子命令：
+
+| 子命令 | 用途 |
+| --- | --- |
+| `info` | 读取微信信息（密钥、昵称等） |
+| `bias` | 获取/输出内存偏移量 |
+| `wx_path` | 显示微信数据目录路径 |
+| `decrypt` | 解密数据库文件 |
+| `dbshow` | 展示数据库内容 |
+| `merge` | 合并多个数据库 |
+| `export` | 导出聊天记录 |
+| `all` | 一键执行全流程 |
+| `ui` | 启动网页界面 |
+| `api` | 启动本地 API 服务 |
+
+## 卸载
+
+```powershell
+python -m pip uninstall -y pywxdump            # 全局安装（方案 B / C）的卸载
+Remove-Item -Recurse -Force .\.venv-3146        # 虚拟环境（方案 A）直接删目录即可
+```
+
+## 重要限制（读数据前必看）
+
+- 3.1.46 是 **微信 3.x 时代**的实现：它读的是 `MSG` / `Contact` / `Session` 这套表结构。
+- **它无法读取微信 4.x 的数据**（4.x 的表名是 `Msg_<hash>` / `contact` / `session`，密钥机制也不同）。用 3.1.46 去读 4.x 库只会报错或无数据。
+- 因此请务必注意：**不要**为了"省事"把 3.1.46 装到微信 4.x 的环境里覆盖 4.0 改造版；它在这里的定位就是**历史版本对照物**。
 
 ## 目录内容
 
